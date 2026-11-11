@@ -11,21 +11,39 @@ model Session {
   sid       String   @id
   data      String
   expiresAt DateTime
-
   @@index([expiresAt])
 }
 
 model User {
-  id                String   @id @default(cuid())
-  discordId         String   @unique
+  id                String       @id @default(cuid())
+  discordId         String       @unique
   username          String
   globalName        String?
   avatar            String?
-  roles             Json     @default("[]")
+  roles             Json         @default("[]")
   privacyVersion    String?
   termsVersion      String?
   privacyAcceptedAt DateTime?
   termsAcceptedAt   DateTime?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  submissions       Submission[]
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
+model Sequence {
+  key   String @id
+  value Int
+}
+
+model Submission {
+  id        String   @id @default(cuid())
+  publicId  String   @unique
+  type      String
+  status    String   @default("PENDING")
+  payload   Json
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([userId, type, status])
 }
