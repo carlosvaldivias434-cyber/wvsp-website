@@ -1,0 +1,8 @@
+{
+  "name": "wvsp-website",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": ["server", "web"],
+  "scripts": {"dev": "concurrently -k -n api,web -c blue,cyan \"npm:dev --workspace server\" \"npm:dev --workspace web\"", "build": "npm run build --workspace web && npm run build --workspace server", "start": "npm run start --workspace server", "db:generate": "npm run db:generate --workspace server", "db:migrate": "npm run db:migrate --workspace server"},
+  "devDependencies": {"concurrently": "^9.1.2"}
+}
